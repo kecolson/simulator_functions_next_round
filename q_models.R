@@ -15,7 +15,11 @@ q_models <- function(sample, an_data, subclass, match_weights, samp_weights, ana
   
   # Collapse analyses to all unique combinations of q estimates, for analyses that require them
   runs <- analyses[,c("method","covs","q_para","q_dist","q_link","q_covform","q_slfull","q_sldefault","q_sllibs")]
-  runs <- runs[runs$method %in% c("gcomp","tmle","bcm")]
+  runs <- runs[runs$method %in% c("gcomp","aiptw","tmle","bcm")]
+  
+  # gcomp, aiptw and tmle will use the same estimates of Q, so we can collapse them
+  runs$method[runs$method %in% c("gcomp","aiptw","tmle")] <- "gcomp_aiptw_tmle"
+  
   runs <- runs[!duplicated(runs),]
   
   # If there are weights, and the method is bcm, gcomp, or tmle, then the q model estimation should include those weights.
@@ -31,7 +35,7 @@ q_models <- function(sample, an_data, subclass, match_weights, samp_weights, ana
                       para = temp_run$q_para, dist = temp_run$q_dist, link = temp_run$q_link, 
                       covform = temp_run$q_covform, slfull = temp_run$q_slfull, 
                       sldefault = temp_run$q_sldefault, sllibs = temp_run$q_sllibs[[1]])
-      if (temp_run$method %in% c("gcomp","tmle")) temp_q <- est_q(an_data = an_data, match_weights = match_weights, samp_weights = samp_weights, 
+      if (temp_run$method == "gcomp_aiptw_tmle") temp_q <- est_q(an_data = an_data, match_weights = match_weights, samp_weights = samp_weights, 
                       covs = temp_run$covs[[1]], 
                       para = temp_run$q_para, dist = temp_run$q_dist, link = temp_run$q_link, 
                       covform = temp_run$q_covform, slfull = temp_run$q_slfull, 

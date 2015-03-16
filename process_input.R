@@ -350,11 +350,14 @@ process_input <- function() {
   
   # 3. Main analysis components ----------------------
   
-  method <- c("unadj","gcomp","pweight","tmle","bcm")[c(T,input$an_gcomp,input$an_pweight,input$an_tmle,input$an_bcm)]
+  method <- c("unadj","gcomp","pweight","aiptw","tmle","bcm")[c(T,input$an_gcomp,input$an_pweight,input$aiptw,input$an_tmle,input$an_bcm)]
   estimand <- c("ate","att")[c(input$ate,input$att)]
   metric <- c("rr","rd","or")[input$effect_metric]
   
   an <- expand.grid(estimand = estimand, metric = metric, method = method, diff = input$outcome_diff, covs = list(input$an_covs), pweight_type = NA)
+
+  # Remove aiptw + ATT because I have not figured out how to do that yet
+  an <- an[!(an$estimand == "att" & an$method == "aiptw"),]
   
   # 4. Bring all analyses components together -------------------------
   

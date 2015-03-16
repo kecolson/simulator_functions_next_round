@@ -18,8 +18,8 @@ analyze <- function(sample, an_data, subclass, match_weights, samp_weights, matc
   if (analyses$diff == 1) an_data$outcome <- an_data$Y_1 - an_data$Y_0
   if (analyses$diff == 0) an_data$outcome <- an_data$Y_1 
   
-  # If data was matched, don't do IPTW 
-  if ((match_input$match_method != NA) & analyses$method == "pweight") est <- NA; return(est)
+  # If data was matched, don't do IPTW or AIPTW 
+  if ((match_input$match_method != NA) & (analyses$method %in% c("pweight","aiptw"))) est <- NA; return(est)
   
   # If match method is not exact, nearest neighbor, or optimal, and methods is BCM, don't estimate
   if (!match_input$match_method %in% c("exact","nn","opt") & analyses$method == "bcm") est <- NA; return(est)

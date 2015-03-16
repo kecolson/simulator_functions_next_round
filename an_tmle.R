@@ -48,5 +48,5 @@ an_tmle <- function(an_data, match_weights, samp_weights, covs, estimand, metric
     EY0 <- weighted.mean(tmle.out$Qstar[tx.indices,1], w = samp_weights[tx.indices]) * (max(an_data$outcome)-min(an_data$outcome))
   }
   
-  return(return_est(a,b,metric))
+  return(return_est(EY1,EY0,metric))
 }

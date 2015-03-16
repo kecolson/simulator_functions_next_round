@@ -23,9 +23,9 @@ an_gcomp <- function(A, q, samp_weights, estimand, metric) {
     
   } else if (estimand == "att") {
     q1 <- q[(n+1):(2*n)]
-    q2 <- q[(2*n+1):(3*n)]
+    q0 <- q[(2*n+1):(3*n)]
     EY1 <- weighted.mean(q1[tx.indices], w = samp_weights[tx.indices])  
-    EY0 <- weighted.mean(q2[tx.indices], w = samp_weights[tx.indices])  
+    EY0 <- weighted.mean(q0[tx.indices], w = samp_weights[tx.indices])  
   }
   return(return_est(EY1, EY0, metric))
 }
